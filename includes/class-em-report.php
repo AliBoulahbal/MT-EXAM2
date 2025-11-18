@@ -42,7 +42,7 @@ class EM_Report {
 	public static function render() {
 		global $wpdb;
 
-		// Step 1: Retrieve ALL students
+		
 		$students = get_posts( [
 			'post_type'   => 'em_student',
 			'numberposts' => -1,
@@ -55,7 +55,7 @@ class EM_Report {
 			return;
 		}
 
-		// Step 2: Prepare data structure (all students)
+		
 		$data = [];
 		foreach ( $students as $s ) {
 			$data[ $s->ID ] = [
@@ -66,7 +66,7 @@ class EM_Report {
 			];
 		}
 
-		// Step 3: Retrieve ALL results + exam links → term
+		
 
 		$student_ids = wp_list_pluck( $students, 'ID' );
 		$student_ids = array_map( 'intval', $student_ids );
@@ -93,7 +93,7 @@ class EM_Report {
 			ARRAY_A
 		);
 
-		// Step 4: Map exam_id → term_id (in a single query)
+		
 		$exam_ids = [];
 		foreach ( $results as $row ) {
 			$exam_ids[] = (int) $row['exam_id'];
@@ -125,7 +125,7 @@ class EM_Report {
 			}
 		}
 
-		// Step 5: Aggregate grades
+		
 		foreach ( $results as $row ) {
 			$student_id = (int) $row['student_id'];
 			$exam_id    = (int) $row['exam_id'];
@@ -137,7 +137,7 @@ class EM_Report {
 			// Get the exam's term
 			$term_info = $exam_term_map[ $exam_id ] ?? null;
 			if ( ! $term_info ) {
-				continue; // Optional: ignore exams without a term
+				continue; 
 			}
 			$term_id = $term_info['term_id'];
 
@@ -165,7 +165,7 @@ class EM_Report {
 			}
 		}
 
-		// Step 6: Sort terms by start_date DESC
+		
 		$term_info_list = array_values( $exam_term_map );
 		usort(
 			$term_info_list,
